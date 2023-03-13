@@ -196,7 +196,7 @@ This tutorial will go over the basics for using Quarto in VS Code, but it also w
 ### Exercises
 
 Clone this practice repository:  
-```
+``` markdown
 git clone https://github.com/SchlossLab/quarto_practice
 ```
 
