@@ -195,6 +195,11 @@ This tutorial will go over the basics for using Quarto in VS Code, but it also w
 
 ### Exercises
 
+Clone this practice repository:  
+```
+git clone https://github.com/SchlossLab/quarto_practice
+```
+
 Create a new quarto document and play around with including the following. You can chose what interests you most and skip what you aren't interested in. If you need content, you can find the following in the `data` and `figures` folders:
 
 	|- data
