@@ -1,0 +1,239 @@
+---
+title: "Quarto Basics"
+format:
+  html:
+    toc: true
+    toc-location: left
+execute:
+    echo: true
+    eval: false
+code-block-bg: true
+code-block-border-left: "#31BAE9"
+---
+
+
+### Introduction to Quarto
+::: {#fig-quarto}
+[![](https://ucsb-meds.github.io/creating-quarto-websites/media/quarto_schematic.png)](https://ucsb-meds.github.io/creating-quarto-websites/)
+
+{{< fa palette >}} by [Allison Horst](https://twitter.com/allison_horst).
+:::
+
+*From the [Quarto README](https://github.com/quarto-dev/quarto-cli#quarto):*  
+Quarto is an open-source scientific and technical publishing system built on [Pandoc](https://pandoc.org). Quarto documents are authored using [markdown](https://en.wikipedia.org/wiki/Markdown), an easy to write plain text format.
+
+In addition to the core capabilities of Pandoc, Quarto includes:
+
+1.  Embedding code and output from Python, R, Julia, and JavaScript via integration with [Jupyter](https://jupyter.org/), [Knitr](https://yihui.org/knitr/), and [Observable](https://github.com/observablehq/).
+
+2.  A variety of extensions to Pandoc markdown useful for technical writing including cross-references, sub-figures, layout panels, hoverable citations and footnotes, callouts, and more.
+
+3.  A project system for rendering groups of documents at once, sharing options across documents, and producing aggregate output like [websites](https://quarto.org/docs/websites/) and [books](https://quarto.org/docs/books/).
+
+4.  Authoring using a wide variety of editors and notebooks including [JupyterLab](https://quarto.org/docs/tools/jupyter-lab.html), [RStudio](https://quarto.org/docs/tools/rstudio.html), and [VS Code](https://quarto.org/docs/tools/vscode.html).
+
+5.  A [visual markdown editor](https://quarto.org/docs/visual-editor/) that provides a productive writing interface for composing long-form documents.
+
+### Why switch from Rmarkdown to Quarto?
+Quarto developers have said that it is not currently necessary to switch to Quarto if you are an R Markdown user, however there are a few reasons it might be a good idea to consider switching:
+
+1. **Reduced dependencies**. Many features of Rmarkdown require additonal packages while quarto includes these features out-of-the-box. (No more forgeting to install tinytex after you install it!!). 
+1. **Quarto is multi-language and multi-engine**. Currently supports R, Python, and JavaScript. However, along with the previous bullet point, you only need to install what you use. If you never use python with Quarto, you dont need to install python.
+1. **Quarto is likely to become the new standard**. Might as well get ahead of the curve! While [R Markdown will still be supported for the forseeable future](https://quarto.org/docs/faq/rmarkdown.html#should-i-switch-from-r-markdown-to-quarto), new features may only be indroduced in Quarto.
+1. **Switching is relatively easy**. Most Rmarkdown documents you've already created can be used.
+
+### A few cool new features and changes
+(@) [Global code chunk options](https://quarto.org/docs/computations/execution-options.html) can be set in the yaml header. Instead of the following in R Markdown:  
+
+    ```` markdown
+    ```{{r}}
+    knitr::opts_chunk$set(echo = FALSE)
+    ```
+    ````   
+    
+    you can set the option in the yaml header to apply to the whole document:    
+    
+    ```` markdown 
+    ---  
+    title: Quarto Doc
+    execute:
+        echo: false
+    ---
+    ````
+      
+    Also, set chunk options as yaml with hashpipe `#|` instead of in the chunk header
+    
+    ```` markdown
+    ```{{r}}
+    #| label: Figure 1
+    #| fig-cap: "This figures shows some cool results from an analysis"
+    
+    plot(fig1)
+    ```
+    ````
+    
+(@) [Universal cross-referencing](https://quarto.org/docs/authoring/figures.html#cross-references) allows you to reference figures or tables in the text.
+
+    ```` markdown
+    ![Speed and Pressure](images/column_plot.png){#fig-mtcars}
+
+    This is illustrated well by @fig-mtcars.
+    ````
+    ![Speed and Pressure](images/column_plot.png){#fig-mtcars}
+
+    This is illustrated well by @fig-mtcars.
+
+(@) Easy to make [websites](https://quarto.org/docs/websites/)! lots of features! Check out Kelly's Quarto website: [https://sovacool.dev/](https://sovacool.dev/)
+
+(@) Extensions allow for custom formats. Kelly made a few for manuscripts: 
+    1. [ASM-style manuscript](https://github.com/kelly-sovacool/asm-msystems)
+    1. [Generic preprint/manuscript format](https://github.com/kelly-sovacool/quarto-manuscript)
+
+(@) [Callout blocks](https://quarto.org/docs/authoring/callouts.html) in HTML output! Five different types:
+
+::: {.callout-note}
+Note that there are five types of callouts, including:
+`note`, `warning`, `important`, `tip`, and `caution`.
+:::
+
+::: {.callout-tip}
+## Tip With Title
+
+This is an example of a callout with a title.
+:::
+
+::: {.callout-important}
+This is an important message
+::::
+
+::: {.callout-warning}
+Warning!!
+:::
+
+
+::: {.callout-caution collapse="true"}
+## Expand To Learn About Collapse
+
+This is an example of a 'folded' caution callout that can be expanded by the user. You can use `collapse="true"` to collapse it by default or `collapse="false"` to make a collapsible callout that is expanded by default.
+:::
+
+(@) [Multiple column flexible content layout](https://quarto.org/docs/authoring/figures.html#complex-layouts)!!! This has been such a pain in the you-know-what for me previously but it is so easy now using `layout`. For example, using `layout-ncol: 2` in a code chunk will result in the plots being ploted in two columns each with a caption:
+
+    ```` markdown
+    ```{{r}}
+    #| layout-ncol: 2
+    #| fig-cap: 
+    #|   - "Speed and Stopping Distances of Cars"
+    #|   - "Vapor Pressure of Mercury as a Function of Temperature"
+
+    plot(cars)
+    plot(pressure)
+    ```
+    ````
+    
+``` {r}
+#| echo: false
+#| eval: true
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - "Speed and Stopping Distances of Cars"
+#|   - "Vapor Pressure as a Function of Temperature"
+library(datasets)
+
+data(mtcars)
+plot(cars)
+plot(pressure)
+
+```
+
+
+### Specific differences to note that might take some getting used to
+1. chunk options as YAML 
+    1. use hashpipe `#|` to specify within code chunk instead of header
+    1. use colon instead of equal sign 
+    1. lowercase booleans (e.g. true/false)
+    
+```` markdown
+```{{r}}
+#| echo: true
+
+summary(data)
+```
+````
+
+2. use `format` instead of `output` to specify format (e.g. pdf, html)
+```` markdown
+---
+title: "Quarto Basics"
+format: html
+---
+````
+
+3. use kebab case (dash-between-words) for YAML keys and figure/layout/code chunk options
+```` markdown
+```{{r}}
+#| layout-ncol: 2
+#| fig-cap-location: bottom
+
+plot(fig1)
+plot(fig2)
+```
+````
+
+4. you will be `rendering` the document instead of `knitting`
+
+### Rendering the Quarto File
+how it works: "When you render a Quarto document, first knitr executes all of the code chunks and creates a new markdown (.md) document which includes the code and its output. The markdown file generated is then processed by pandoc, which creates the finished format. The Render button encapsulates these actions and executes them in the right order for you."
+![](https://quarto.org/docs/get-started/hello/images/rstudio-qmd-how-it-works.png)
+
+### Quarto Setup
+
+This tutorial will go over the basics for using Quarto in VS Code, but it also works in [RStudio](https://quarto.org/docs/get-started/hello/rstudio.html) if you prefer.
+
+1. [Install Quarto](https://quarto.org/docs/get-started/)
+1. Download the [Quarto VS Code Extension](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)
+
+### Exercises
+
+Create a new quarto document and play around with including the following. You can chose what interests you most and skip what you aren't interested in. If you need content, you can find the following in the `data` and `figures` folders:
+
+	|- data
+    |   |- gapminder.csv                  # the full gapminder dataset
+    |   +- mean_gdpPercap_1997_2007.csv   # summary of mean gdpPercap for 1997 & 2007
+	|- figures
+    |   |- gdp_lifeExp_1997.png       # plot of 1997 gdpPercap vs life expecancy
+    |   |- gdp_lifeExp_2007.png       # plot of 2007 gdpPercap vs life expecancy
+    |   +- gdp_lifeExp_continent.png  # plot of gdpPercap vs lifeExp 1997 & 2007 by continent
+    |- code
+    |   +- make_plot.R       # code to make the plots in the figures folder
+
+Here are some suggestions for exercises:  
+
+1. Set a global option (e.g. echo) [help](https://quarto.org/docs/computations/execution-options.html)
+
+1. Plot several images in the layout of your choice. [help](https://quarto.org/docs/authoring/figures.html#complex-layouts)
+
+1. Add captions to the figures [help-captions](), [help-subfigures](https://quarto.org/docs/authoring/figures.html#subfigures)
+
+1. Reference a figure in text [help](https://quarto.org/docs/authoring/figures.html#cross-references)
+
+1. Make a table [help](https://quarto.org/docs/authoring/tables.html)
+
+1. Make a flowchart [help](https://quarto.org/docs/authoring/diagrams.html#overview)
+
+1. add a citation and bibliography [help](https://quarto.org/docs/authoring/footnotes-and-citations.html)
+
+1. add a few sections and create a table of contents [help](https://quarto.org/docs/output-formats/html-basics.html#table-of-contents)
+
+
+### Resources 
+[Tutorial for Quarto (in python)](https://quarto.org/docs/get-started/hello/vscode.html)  
+[Using R with Quarto](https://quarto.org/docs/computations/r.html)  
+[Guide](https://quarto.org/docs/guide/)    
+[Blog Post by Alison Hill](https://www.apreshill.com/blog/2022-04-we-dont-talk-about-quarto/)  
+[Blog post by Nivola Rennie and Colin Gillespie](https://www.jumpingrivers.com/blog/quarto-rmarkdown-comparison/)
+
+#### Website with Quarto
+[Guide](https://quarto.org/docs/websites/)  
+[Post by Sam Csik](https://ucsb-meds.github.io/creating-quarto-websites/)  
+[Font Awesome Extension for Quarto](https://github.com/quarto-ext/fontawesome)
