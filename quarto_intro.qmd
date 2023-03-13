@@ -237,3 +237,4 @@ Here are some suggestions for exercises:
 [Guide](https://quarto.org/docs/websites/)  
 [Post by Sam Csik](https://ucsb-meds.github.io/creating-quarto-websites/)  
 [Font Awesome Extension for Quarto](https://github.com/quarto-ext/fontawesome)
+[Quarto with GitHub Pages](https://quarto.org/docs/publishing/github-pages.html)
